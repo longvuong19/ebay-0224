@@ -6,7 +6,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const AuthPage = () => {
-  //   const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient();
 
   return (
     <>
@@ -22,13 +22,13 @@ const AuthPage = () => {
         </div>
 
         <div className="max-w-[400px] mx-auto px-2">
-          {/* <Auth
+          <Auth
             onlyThirdPartyProviders
             appearance={{ theme: ThemeSupa }}
             providers={["google"]}
             redirectTo={`${window.location.origin}/auth/callback`}
             supabaseClient={supabase}
-          /> */}
+          />
         </div>
       </div>
     </>
