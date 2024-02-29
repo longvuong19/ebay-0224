@@ -1,19 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { ThemeSupa, supabase } from "@supabase/auth-ui-shared";
-import { Auth } from "@supabase/auth-ui-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import Link from "next/link";
 
-const AuthPage = () => {
+export default function AuthPage() {
   const supabase = createClientComponentClient();
 
   return (
     <>
-      <div className="w-full min-h-screen bg-white" id="AuthPage">
+      <div id="AuthPage" className="w-full min-h-screen bg-white">
         <div className="w-full flex items-center justify-center p-5 border-b-gray-300">
           <Link href="/" className="min-w-[170px]">
-            <img src="/images/logo.svg" width="170" alt="" />
+            <img width="170" src="/images/logo.svg" />
           </Link>
         </div>
 
@@ -24,15 +24,13 @@ const AuthPage = () => {
         <div className="max-w-[400px] mx-auto px-2">
           <Auth
             onlyThirdPartyProviders
-            appearance={{ theme: ThemeSupa }}
-            providers={["google"]}
             redirectTo={`${window.location.origin}/auth/callback`}
             supabaseClient={supabase}
+            providers={["google"]}
+            appearance={{ theme: ThemeSupa }}
           />
         </div>
       </div>
     </>
   );
-};
-
-export default AuthPage;
+}

@@ -1,10 +1,11 @@
 import "./globals.css";
+import Provider from "./context/user";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "eBay Clone",
-  description: "ebay Clone",
+  description: "eBay Clone",
 };
 
 export default function RootLayout({ children }) {
@@ -12,7 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ToastContainer />
-        {children}
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

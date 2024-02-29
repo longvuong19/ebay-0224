@@ -2,7 +2,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const GET = async (request) => {
+export async function GET(request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
 
@@ -11,7 +11,6 @@ const GET = async (request) => {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
+  // URL to redirect to after sign in process completes
   return NextResponse.redirect(requestUrl.origin);
-};
-
-export default GET;
+}
