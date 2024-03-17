@@ -1,5 +1,6 @@
 import "./globals.css";
 import Provider from "./context/user";
+import CartProvider from "./context/cart";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ToastContainer />
-        <Provider>{children}</Provider>
+        <Provider>
+          <CartProvider>{children}</CartProvider>
+        </Provider>
       </body>
     </html>
   );

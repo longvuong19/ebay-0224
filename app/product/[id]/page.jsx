@@ -1,9 +1,13 @@
 "use client";
 
 import SimilarProducts from "@/app/components/SimilarProducts";
+import { useCart } from "@/app/context/cart";
 import MainLayout from "@/app/layouts/MainLayout";
+import { toast } from "react-toastify";
 
 const Product = ({ params }) => {
+  const cart = useCart();
+
   const product = {
     id: 1,
     title: "LG Screen",
@@ -52,8 +56,25 @@ const Product = ({ params }) => {
                     </div>
                   ) : null}
                 </div>
-                <button className="text-white bg-[#3498c9] py-2 px-20 rounded-full cursor-pointer">
-                  Add to Cart
+                <button
+                  className={`text-white bg-[#3498c9] py-2 px-20 rounded-full cursor-pointer
+                ${
+                  cart.isItemAdded
+                    ? "bg-[#e9a321] hover:bg-[#bf851a]"
+                    : "bg-[#3498c9] hover:bg-[#0054a0]"
+                }
+                `}
+                  onClick={() => {
+                    if (cart.isItemAdded) {
+                      cart.removeFromCart(product);
+                      toast.info("Removed from cart!", { autoClose: 3000 });
+                    } else {
+                      cart.addToCart(product);
+                      toast.success("Added to cart!", { autoClose: 3000 });
+                    }
+                  }}
+                >
+                  {cart.isItemAdded ? "Remove From Cart" : "Add To Cart"}
                 </button>
               </div>
               <div className="border-b py-1" />
