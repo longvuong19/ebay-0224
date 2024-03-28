@@ -3,27 +3,34 @@
 import Link from "next/link";
 import MainLayout from "../layouts/MainLayout";
 import { CiDeliveryTruck } from "react-icons/ci";
+import { useUser } from "../context/user";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import useIsLoading from "../hooks/useIsLoading";
+import moment from "moment";
 
 const Orders = () => {
-  const orders = [
-    {
-      id: 1,
-      stripe_id: "1902",
-      name: "Test",
-      address: "Test",
-      zipcode: "Test",
-      city: "Test",
-      country: "Test",
-      total: 1299,
-      orderItem: [
-        {
-          id: 1,
-          title: "LG Screen",
-          url: "https://picsum.photos/id/7",
-        },
-      ],
-    },
-  ];
+  const { user } = useUser();
+  const [orders, setOrders] = useState([]);
+
+  const getOrders = async () => {
+    try {
+      if (!user && !user?.id) return;
+      const response = await fetch("/api/orders");
+      const result = await response.json();
+      setOrders(result);
+      useIsLoading(false);
+    } catch (error) {
+      toast.error("Something went wrong!", { autoClose: 3000 });
+      console.log(error);
+      useIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    useIsLoading(true);
+    getOrders();
+  }, [user]);
 
   return (
     <>
@@ -63,19 +70,29 @@ const Orders = () => {
                     {order?.total / 100}
                   </div>
 
+                  <div className="pt-2">
+                    <span className="font-bold mr-2">Order Created:</span>$
+                    {moment(order?.created_at).calendar()}
+                  </div>
+
+                  <div className="pt-2">
+                    <span className="font-bold mr-2">Delivery Time:</span>$
+                    {moment(order?.created_at).add(3, "days").calendar()}
+                  </div>
+
                   <div className="flex items-center gap-4">
                     {order?.orderItem.map((item) => (
                       <div key={item.id} className="flex items-center">
                         <Link
-                          href="/"
+                          href={`/product/${item.product_id}`}
                           className="py-1 hover:underline text-blue-500 font-bold"
                         >
                           <img
-                            src={item.url + "/120"}
+                            src={item.product.url + "/120"}
                             className="rounded"
                             alt=""
                           />
-                          {item.title}
+                          {item.product.title}
                         </Link>
                       </div>
                     ))}

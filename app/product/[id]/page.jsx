@@ -2,20 +2,38 @@
 
 import SimilarProducts from "@/app/components/SimilarProducts";
 import { useCart } from "@/app/context/cart";
+import useIsLoading from "@/app/hooks/useIsLoading";
 import MainLayout from "@/app/layouts/MainLayout";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Product = ({ params }) => {
   const cart = useCart();
+  const [product, setProduct] = useState({});
+  const [isMounted, setIsMounted] = useState(false);
 
-  const product = {
-    id: 1,
-    title: "LG Screen",
-    description:
-      "Nulla ultrices tellus id nisl aliquam efficitur. Nulla congue eu libero ut vehicula. Ut faucibus vulputate pharetra. Aenean pretium accumsan magna, in ultricies neque congue in.",
-    url: "https://picsum.photos/id/7",
-    price: 2500,
+  const getProduct = async () => {
+    useIsLoading(true);
+    setProduct({});
+
+    const response = await fetch(`/api/product/${params.id}`);
+    const prod = await response.json();
+    setProduct(prod);
+    cart.isItemAddedToCart(prod);
+    useIsLoading(false);
   };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <MainLayout>

@@ -1,28 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import CarouselComp from "./components/CarouselComp";
 import Product from "./components/Product";
 import MainLayout from "./layouts/MainLayout";
+import useIsLoading from "./hooks/useIsLoading";
 
 export default function Home() {
-  const products = [
-    {
-      id: 1,
-      title: "LG Screen",
-      description:
-        "Nulla ultrices tellus id nisl aliquam efficitur. Nulla congue eu libero ut vehicula. Ut faucibus vulputate pharetra. Aenean pretium accumsan magna, in ultricies neque congue in.",
-      url: "https://picsum.photos/id/7",
-      price: 2500,
-    },
-    {
-      id: 2,
-      title: "Snickers",
-      description:
-        "Nulla ultrices tellus id nisl aliquam efficitur. Nulla congue eu libero ut vehicula. Ut faucibus vulputate pharetra. Aenean pretium accumsan magna, in ultricies neque congue in.",
-      url: "https://picsum.photos/id/20",
-      price: 1300,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    useIsLoading(true);
+
+    const response = await fetch(`/api/products`);
+    const prods = await response.json();
+
+    setProducts([]);
+    setProducts(prods);
+    useIsLoading(false);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <MainLayout>
